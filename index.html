@@ -10,85 +10,90 @@
 </head>
 <body>
 
-    <header class="main-header">
-        <i class="fas fa-batman logo"></i>
+    <header class="master-header">
+        <i class="fas fa-batman logo-icon"></i>
         <h1>Batman Command Center</h1>
-        <i class="fas fa-batman logo"></i>
+        <i class="fas fa-batman logo-icon"></i>
     </header>
 
-    <div class="top-bar">
-        <div class="nav-group">
-            <div class="nav-row">
-                <button onclick="changeYear(-1)"><i class="fas fa-arrow-left"></i></button>
-                <span id="year-display">2026</span>
-                <button onclick="changeYear(1)"><i class="fas fa-arrow-right"></i></button>
+    <div class="dashboard">
+        <div class="top-row">
+            <div class="calendar-container grid-box">
+                <div class="calendar-controls">
+                    <div class="nav-unit">
+                        <button onclick="changeYear(-1)"><i class="fas fa-arrow-left"></i></button>
+                        <span id="year-label">2026</span>
+                        <button onclick="changeYear(1)"><i class="fas fa-arrow-right"></i></button>
+                    </div>
+                    <div class="nav-unit">
+                        <button onclick="changeMonth(-1)"><i class="fas fa-arrow-left"></i></button>
+                        <span id="month-label">Month</span>
+                        <button onclick="changeMonth(1)"><i class="fas fa-arrow-right"></i></button>
+                    </div>
+                    <div class="clock-unit">
+                        <div id="full-date">--/--/----</div>
+                        <div class="dual-clocks">
+                            <div>Doha: <span id="doha-clock">00:00</span></div>
+                            <div>Dubai: <span id="dubai-clock">00:00</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="calendar-grid"></div>
             </div>
-            <div class="nav-row">
-                <button onclick="changeMonth(-1)"><i class="fas fa-arrow-left"></i></button>
-                <span id="month-display">Month</span>
-                <button onclick="changeMonth(1)"><i class="fas fa-arrow-right"></i></button>
+
+            <div class="top-right-column">
+                <div class="grid-box promo-box">
+                    <h3><i class="fas fa-bolt"></i> Global Tech Occasions</h3>
+                    <div id="promo-list"></div>
+                </div>
+                <div class="grid-box task-box">
+                    <h3><i class="fas fa-list-check"></i> Tasks & Urgency</h3>
+                    <form id="task-form">
+                        <input type="text" id="task-desc" placeholder="Task..." required>
+                        <input type="datetime-local" id="task-time" class="dark-input" required>
+                        <select id="task-urgency" class="dark-input">
+                            <option value="low">Low</option>
+                            <option value="med">Medium</option>
+                            <option value="high">Urgent</option>
+                        </select>
+                        <button type="submit" class="bat-btn">Add to Command</button>
+                    </form>
+                    <div id="task-list" class="scroll-list"></div>
+                </div>
             </div>
         </div>
 
-        <div class="time-display">
-            <div id="real-date">--/--/----</div>
-            <div class="clocks">
-                <div>Doha: <span id="doha-time">--:--</span></div>
-                <div>Dubai: <span id="dubai-time">--:--</span></div>
+        <div class="mid-row">
+            <div class="grid-box news-releases">
+                <h3>New Releases News</h3>
+                <p><small>Mobiles, IoT, Drones, Gadgets, Audio, Software</small></p>
+                <div class="placeholder-text">Scanning global release feeds...</div>
+            </div>
+            <div class="grid-box radar-box">
+                <h3>FlightRadar24: HIA (120nm)</h3>
+                <iframe src="https://www.flightradar24.com/simple_index.php?lat=25.27&lon=51.61&z=8" width="100%" height="220" style="border:none;"></iframe>
+            </div>
+        </div>
+
+        <div class="bottom-row">
+            <div class="grid-box news-slicer-box">
+                <div class="slicer-header">
+                    <h3>Tech News Feed</h3>
+                    <div class="slicer-buttons">
+                        <button onclick="filterNews('TechCrunch')">TechCrunch</button>
+                        <button onclick="filterNews('The Verge')">The Verge</button>
+                        <button onclick="filterNews('Wired')">Wired</button>
+                        <button onclick="filterNews('Gizmodo')">Gizmodo</button>
+                        <button onclick="filterNews('Mashable')">Mashable</button>
+                        <button onclick="filterNews('LinusTechTips')">LTT</button>
+                    </div>
+                </div>
+                <div id="main-news-display" class="news-content">
+                    <p>Select an outlet above to slice the data...</p>
+                </div>
             </div>
         </div>
     </div>
-
-    <main class="dashboard-grid">
-        <section class="grid-box calendar-box">
-            <div id="calendar-container"></div>
-        </section>
-
-        <section class="right-column">
-            <div class="grid-box promo-box">
-                <h3>Global Electronics Occasions</h3>
-                <div id="promo-list"></div>
-            </div>
-            <div class="grid-box task-box">
-                <h3>Tasks & Urgency</h3>
-                <form id="task-form">
-                    <input type="text" id="task-desc" placeholder="Task description..." required>
-                    <input type="datetime-local" id="task-time" class="dark-picker" required>
-                    <select id="task-urgency">
-                        <option value="low">Low</option>
-                        <option value="med">Medium</option>
-                        <option value="high">Urgent</option>
-                    </select>
-                    <button type="submit">Add Task</button>
-                </form>
-                <div id="task-list"></div>
-            </div>
-        </section>
-
-        <section class="grid-box news-releases">
-            <h3>New Releases News</h3>
-            <p><small>Mobile, IoT, Drones, Software</small></p>
-            <div id="release-feed" class="feed">Loading latest tech launches...</div>
-        </section>
-
-        <section class="grid-box radar-box">
-            <h3>FlightRadar24: HIA (120nm)</h3>
-            <iframe src="https://www.flightradar24.com/simple_index.php?lat=25.27&lon=51.61&z=8" width="100%" height="250px"></iframe>
-        </section>
-
-        <section class="grid-box tech-outlet-box">
-            <div class="news-header">
-                <h3>Tech News Feed</h3>
-                <select id="news-slicer">
-                    <option value="all">All Outlets</option>
-                    <option value="wired">Wired</option>
-                    <option value="theverge">The Verge</option>
-                    <option value="techcrunch">TechCrunch</option>
-                </select>
-            </div>
-            <div id="main-news-feed" class="feed">Select an outlet to view recent updates from Wired, Gizmodo, and more...</div>
-        </section>
-    </main>
 
     <script src="script.js"></script>
 </body>
