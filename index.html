@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Batman Command Center</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/Batman_Logo.svg" class="bat-logo" alt="Bat Logo">
+        <i class="fas fa-batman main-bat-icon"></i>
         <h1>THE BATMAN COMMAND CENTER</h1>
         <div id="local-time">Doha: --:--:--</div>
     </header>
@@ -17,23 +18,29 @@
     <main>
         <section id="calendar-section">
             <div class="controls">
-                <button onclick="toggleView('monthly')">Monthly View</button>
-                <button onclick="toggleView('yearly')">Yearly View</button>
-                <h2 id="view-title">Monthly View</h2>
+                <div class="nav-buttons">
+                    <button onclick="changeMonth(-1)"><i class="fas fa-chevron-left"></i></button>
+                    <h2 id="view-title">Month Year</h2>
+                    <button onclick="changeMonth(1)"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                <div class="view-switch">
+                    <button onclick="setView('monthly')">Monthly</button>
+                    <button onclick="setView('yearly')">Yearly</button>
+                </div>
             </div>
             <div id="calendar-container"></div>
         </section>
 
         <aside id="sidebar">
             <div class="side-panel" id="upcoming-events">
-                <h3><img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/Batman_Logo.svg" class="small-logo"> Upcoming Promos</h3>
+                <h3><i class="fas fa-mask"></i> Upcoming Promos</h3>
                 <div id="event-list" class="list-container"></div>
             </div>
             <div class="side-panel" id="task-manager">
-                <h3><img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/Batman_Logo.svg" class="small-logo"> Task Entry</h3>
+                <h3><i class="fas fa-shredder"></i> Task Entry</h3>
                 <form id="task-form">
                     <input type="text" id="task-desc" placeholder="Task description..." required>
-                    <input type="datetime-local" id="task-time" required>
+                    <input type="datetime-local" id="task-time" class="dark-picker" required>
                     <select id="task-urgency">
                         <option value="low">Low Urgency</option>
                         <option value="med">Medium Urgency</option>
@@ -45,7 +52,6 @@
             </div>
         </aside>
     </main>
-
     <script src="script.js"></script>
 </body>
 </html>
