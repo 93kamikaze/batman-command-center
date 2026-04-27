@@ -1,99 +1,70 @@
 :root {
-    --bat-black: #050505;
-    --bat-card: #121212;
-    --bat-accent: #ffcc00;
-    --border: #222;
+    --bg: #050505;
+    --card: #111111;
+    --accent: #ffcc00;
+    --border: #222222;
+    --text: #ffffff;
 }
 
 body {
-    background-color: var(--bat-black);
-    color: #e0e0e0;
+    background-color: var(--bg);
+    color: var(--text);
     font-family: 'Poppins', sans-serif;
     margin: 0;
-    padding: 10px;
-    box-sizing: border-box;
+    padding: 15px;
 }
 
-.main-header {
+.master-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid var(--bat-accent);
-    padding: 10px 40px;
+    border-bottom: 2px solid var(--accent);
+    padding: 10px 20px;
+    margin-bottom: 15px;
 }
 
-.logo { font-size: 1.5rem; color: var(--bat-accent); }
-
-.top-bar {
-    display: flex;
-    justify-content: space-between;
-    padding: 15px;
-    background: var(--bat-card);
-    margin: 10px 0;
-    border: 1px solid var(--border);
-}
-
-.nav-row { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; }
-.nav-row span { width: 120px; text-align: center; font-weight: 600; }
-
-.time-display { text-align: right; border: 1px solid var(--bat-accent); padding: 5px 15px; }
-
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 15px;
-}
+.logo-icon { font-size: 24px; color: var(--accent); }
 
 .grid-box {
-    background: var(--bat-card);
+    background: var(--card);
     border: 1px solid var(--border);
     padding: 15px;
     border-radius: 4px;
 }
 
-.right-column { display: flex; flex-direction: column; gap: 15px; }
+/* Wireframe Layout Logic */
+.top-row { display: flex; gap: 15px; margin-bottom: 15px; height: 450px; }
+.calendar-container { flex: 2; display: flex; flex-direction: column; }
+.top-right-column { flex: 1; display: flex; flex-direction: column; gap: 15px; }
 
-/* Mid Row Fix */
-.news-releases, .radar-box { grid-column: span 1; height: 300px; }
+.mid-row { display: flex; gap: 15px; margin-bottom: 15px; height: 300px; }
+.news-releases, .radar-box { flex: 1; }
 
-/* Bottom Row Fix */
-.tech-outlet-box { grid-column: span 2; min-height: 400px; }
+.bottom-row { width: 100%; min-height: 400px; }
 
-.calendar-box { min-height: 400px; }
-#calendar-container { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
-.cal-day { background: #1a1a1a; padding: 10px; min-height: 50px; border: 1px solid #222; }
+/* Calendar Sub-Elements */
+.calendar-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.nav-unit { display: flex; align-items: center; gap: 10px; font-weight: 600; }
+.clock-unit { border: 1px solid var(--accent); padding: 5px 15px; text-align: center; font-size: 0.8rem; }
+#calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; flex-grow: 1; }
+.cal-day { background: #0a0a0a; border: 1px solid #222; min-height: 40px; padding: 5px; font-size: 0.8rem; }
 
-/* Task Styling */
-.task-item {
-    background: #1a1a1a;
-    padding: 8px;
-    margin-top: 8px;
-    border-left: 4px solid var(--bat-accent);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+/* Tasks */
+.scroll-list { overflow-y: auto; flex-grow: 1; margin-top: 10px; }
+.task-item { 
+    background: #1a1a1a; 
+    margin-bottom: 5px; 
+    padding: 10px; 
+    border-left: 4px solid var(--accent);
+    display: flex; 
+    justify-content: space-between; 
 }
-
 .task-item.high { border-left-color: #ff4444; }
-.remove-btn { color: #ff4444; cursor: pointer; background: none; border: none; }
 
-.feed { color: #888; font-size: 0.9rem; margin-top: 10px; }
+/* Slicer Buttons */
+.slicer-buttons { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+.slicer-buttons button { padding: 4px 10px; font-size: 0.7rem; border: 1px solid var(--accent); background: none; color: var(--accent); cursor: pointer; }
+.slicer-buttons button:hover { background: var(--accent); color: #000; }
 
-button {
-    background: #222;
-    color: var(--bat-accent);
-    border: 1px solid var(--bat-accent);
-    cursor: pointer;
-    font-family: 'Poppins';
-}
-
-input, select {
-    background: #1a1a1a;
-    color: white;
-    border: 1px solid #333;
-    padding: 5px;
-    width: 100%;
-    margin-bottom: 5px;
-}
-
-.dark-picker { color-scheme: dark; }
+.bat-btn { width: 100%; background: var(--accent); color: black; font-weight: bold; padding: 8px; border: none; cursor: pointer; }
+.dark-input { background: #1a1a1a; color: white; border: 1px solid #333; width: 100%; margin-bottom: 8px; color-scheme: dark; }
