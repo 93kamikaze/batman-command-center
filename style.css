@@ -1,85 +1,99 @@
 :root {
-    --bat-black: #0a0a0a;
-    --bat-gray: #1a1a1a;
-    --bat-accent: #ffdb58;
-    --high-urgency: #ff4444;
-    --med-urgency: #ffbb33;
-    --low-urgency: #00C851;
+    --bat-black: #050505;
+    --bat-card: #121212;
+    --bat-accent: #ffcc00;
+    --border: #222;
 }
 
 body {
     background-color: var(--bat-black);
-    color: white;
+    color: #e0e0e0;
     font-family: 'Poppins', sans-serif;
     margin: 0;
-    height: 100vh;
-    overflow: hidden;
-}
-
-header {
-    text-align: center;
-    padding: 15px;
-    border-bottom: 2px solid var(--bat-accent);
-}
-
-.main-bat-icon { font-size: 3rem; color: var(--bat-accent); margin-bottom: 10px; }
-
-main {
-    display: grid;
-    grid-template-columns: 1fr 380px;
-    gap: 20px;
-    padding: 20px;
-    height: calc(100vh - 120px);
-}
-
-#calendar-section { background: var(--bat-gray); border-radius: 10px; padding: 20px; display: flex; flex-direction: column; }
-
-.controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.nav-buttons { display: flex; align-items: center; gap: 15px; }
-
-/* Fixed Scrollable Sidebar */
-#sidebar { display: flex; flex-direction: column; gap: 20px; height: 100%; overflow: hidden; }
-.side-panel {
-    background: #111;
-    border: 1px solid #333;
-    border-radius: 8px;
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    min-height: 0; /* Important for flex-scroll */
-}
-
-.list-container { flex-grow: 1; overflow-y: auto; margin-top: 10px; padding-right: 5px; }
-
-/* Dark Date Picker Fix */
-.dark-picker {
-    color-scheme: dark; /* Forces browser UI to dark mode */
-    background: #222 !important;
-    color: white !important;
-}
-
-.task-card {
-    background: #222;
-    padding: 12px;
-    margin-bottom: 10px;
-    border-left: 4px solid var(--bat-accent);
-}
-
-/* Calendar Grid */
-#calendar-container { 
-    display: grid; 
-    grid-template-columns: repeat(7, 1fr); 
-    gap: 8px; 
-    flex-grow: 1;
-}
-
-.calendar-day { 
-    background: #222; 
-    border: 1px solid #333; 
     padding: 10px;
-    position: relative;
+    box-sizing: border-box;
 }
 
-.day-event { font-size: 0.7rem; color: var(--bat-accent); margin-top: 5px; }
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--bat-accent);
+    padding: 10px 40px;
+}
 
-button:hover { opacity: 0.8; }
+.logo { font-size: 1.5rem; color: var(--bat-accent); }
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    background: var(--bat-card);
+    margin: 10px 0;
+    border: 1px solid var(--border);
+}
+
+.nav-row { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; }
+.nav-row span { width: 120px; text-align: center; font-weight: 600; }
+
+.time-display { text-align: right; border: 1px solid var(--bat-accent); padding: 5px 15px; }
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 15px;
+}
+
+.grid-box {
+    background: var(--bat-card);
+    border: 1px solid var(--border);
+    padding: 15px;
+    border-radius: 4px;
+}
+
+.right-column { display: flex; flex-direction: column; gap: 15px; }
+
+/* Mid Row Fix */
+.news-releases, .radar-box { grid-column: span 1; height: 300px; }
+
+/* Bottom Row Fix */
+.tech-outlet-box { grid-column: span 2; min-height: 400px; }
+
+.calendar-box { min-height: 400px; }
+#calendar-container { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+.cal-day { background: #1a1a1a; padding: 10px; min-height: 50px; border: 1px solid #222; }
+
+/* Task Styling */
+.task-item {
+    background: #1a1a1a;
+    padding: 8px;
+    margin-top: 8px;
+    border-left: 4px solid var(--bat-accent);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.task-item.high { border-left-color: #ff4444; }
+.remove-btn { color: #ff4444; cursor: pointer; background: none; border: none; }
+
+.feed { color: #888; font-size: 0.9rem; margin-top: 10px; }
+
+button {
+    background: #222;
+    color: var(--bat-accent);
+    border: 1px solid var(--bat-accent);
+    cursor: pointer;
+    font-family: 'Poppins';
+}
+
+input, select {
+    background: #1a1a1a;
+    color: white;
+    border: 1px solid #333;
+    padding: 5px;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.dark-picker { color-scheme: dark; }
