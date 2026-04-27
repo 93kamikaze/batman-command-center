@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Batman Command Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/Batman_Logo.svg" class="bat-logo" alt="Bat Logo">
+        <h1>THE BATMAN COMMAND CENTER</h1>
+        <div id="local-time">Doha: --:--:--</div>
+    </header>
+
+    <main>
+        <section id="calendar-section">
+            <div class="controls">
+                <button onclick="toggleView('monthly')">Monthly View</button>
+                <button onclick="toggleView('yearly')">Yearly View</button>
+                <h2 id="view-title">Monthly View</h2>
+            </div>
+            <div id="calendar-container"></div>
+        </section>
+
+        <aside id="sidebar">
+            <div class="side-panel" id="upcoming-events">
+                <h3><img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/Batman_Logo.svg" class="small-logo"> Upcoming Promos</h3>
+                <div id="event-list" class="list-container"></div>
+            </div>
+            <div class="side-panel" id="task-manager">
+                <h3><img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/Batman_Logo.svg" class="small-logo"> Task Entry</h3>
+                <form id="task-form">
+                    <input type="text" id="task-desc" placeholder="Task description..." required>
+                    <input type="datetime-local" id="task-time" required>
+                    <select id="task-urgency">
+                        <option value="low">Low Urgency</option>
+                        <option value="med">Medium Urgency</option>
+                        <option value="high">High Urgency</option>
+                    </select>
+                    <button type="submit">Add to Command</button>
+                </form>
+                <div id="user-tasks" class="list-container"></div>
+            </div>
+        </aside>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
