@@ -1,107 +1,80 @@
-let currentDisplayDate = new Date(); // Defaults to today
-let currentView = 'monthly';
+let currentDate = new Date();
 let tasks = [];
 
-const qatarEvents = [
-    { name: "National Sports Day", month: 1, day: 10 }, // Feb
-    { name: "Ramadan Promo", month: 1, day: 18 },
-    { name: "Eid Al-Fitr", month: 2, day: 20 },
-    { name: "Eid Al-Adha", month: 4, day: 27 },
-    { name: "Back to School", month: 7, day: 25 },
-    { name: "National Day", month: 11, day: 18 }
+const occasions = [
+    { name: "Qatar Sports Day", date: "2026-02-10" },
+    { name: "Eid Al-Fitr Promo", date: "2026-03-20" },
+    { name: "Back to School", date: "2026-08-25" },
+    { name: "National Day", date: "2026-12-18" }
 ];
 
-function updateClock() {
-    const options = { timeZone: 'Asia/Qatar', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
-    document.getElementById('local-time').innerText = "DOHA: " + new Intl.DateTimeFormat('en-GB', options).format(new Date());
+function updateClocks() {
+    const now = new Date();
+    const doha = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Qatar', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(now);
+    const dubai = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Dubai', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(now);
+    
+    document.getElementById('doha-time').innerText = doha;
+    document.getElementById('dubai-time').innerText = dubai;
+    document.getElementById('real-date').innerText = now.toLocaleDateString();
 }
 
 function renderCalendar() {
     const container = document.getElementById('calendar-container');
-    const title = document.getElementById('view-title');
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    
+    document.getElementById('year-display').innerText = year;
+    document.getElementById('month-display').innerText = currentDate.toLocaleString('default', { month: 'long' });
+
     container.innerHTML = '';
-
-    if (currentView === 'monthly') {
-        const year = currentDisplayDate.getFullYear();
-        const month = currentDisplayDate.getMonth();
-        title.innerText = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(currentDisplayDate);
-        
-        const firstDay = new Date(year, month, 1).getDay();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-        // Empty slots for start of month
-        for (let i = 0; i < firstDay; i++) {
-            const empty = document.createElement('div');
-            empty.className = 'calendar-day';
-            empty.style.opacity = '0.3';
-            container.appendChild(empty);
-        }
-
-        for (let d = 1; d <= daysInMonth; d++) {
-            const dayDiv = document.createElement('div');
-            dayDiv.className = 'calendar-day';
-            dayDiv.innerHTML = `<span>${d}</span>`;
-            
-            // Check for Qatari Events
-            const event = qatarEvents.find(e => e.month === month && e.day === d);
-            if (event) {
-                dayDiv.innerHTML += `<div class="day-event">${event.name}</div>`;
-                dayDiv.style.borderColor = 'var(--bat-accent)';
-            }
-            container.appendChild(dayDiv);
-        }
-    } else {
-        title.innerText = currentDisplayDate.getFullYear() + " Overview";
-        container.style.gridTemplateColumns = 'repeat(4, 1fr)';
-        // Simplified Yearly Logic
-        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        months.forEach((m, idx) => {
-            const mDiv = document.createElement('div');
-            mDiv.className = 'calendar-day';
-            mDiv.style.textAlign = 'center';
-            mDiv.innerHTML = `<strong>${m}</strong>`;
-            container.appendChild(mDiv);
-        });
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    
+    for (let i = 1; i <= daysInMonth; i++) {
+        const div = document.createElement('div');
+        div.className = 'cal-day';
+        div.innerText = i;
+        container.appendChild(div);
     }
 }
 
-function changeMonth(step) {
-    currentDisplayDate.setMonth(currentDisplayDate.getMonth() + step);
-    renderCalendar();
-}
+// Nav Controls
+window.changeMonth = (val) => { currentDate.setMonth(currentDate.getMonth() + val); renderCalendar(); };
+window.changeYear = (val) => { currentDate.setFullYear(currentDate.getFullYear() + val); renderCalendar(); };
 
-function setView(view) {
-    currentView = view;
-    renderCalendar();
-}
-
-// Task Handling
+// Task Logic
 document.getElementById('task-form').addEventListener('submit', (e) => {
     e.preventDefault();
     const task = {
+        id: Date.now(),
         desc: document.getElementById('task-desc').value,
-        time: document.getElementById('task-time').value,
         urgency: document.getElementById('task-urgency').value,
-        timestamp: new Date(document.getElementById('task-time').value).getTime()
+        time: document.getElementById('task-time').value
     };
     tasks.push(task);
-    tasks.sort((a, b) => a.timestamp - b.timestamp);
+    tasks.sort((a, b) => new Date(a.time) - new Date(b.time));
     renderTasks();
     e.target.reset();
 });
 
 function renderTasks() {
-    const list = document.getElementById('user-tasks');
+    const list = document.getElementById('task-list');
     list.innerHTML = '';
     tasks.forEach(t => {
-        const div = document.createElement('div');
-        div.className = `task-card urgency-${t.urgency}`;
-        div.innerHTML = `<strong>${t.desc}</strong><br><small>${t.time.replace('T', ' ')}</small>`;
-        list.appendChild(div);
+        const item = document.createElement('div');
+        item.className = `task-item ${t.urgency}`;
+        item.innerHTML = `
+            <div><strong>${t.desc}</strong><br><small>${t.time}</small></div>
+            <button class="remove-btn" onclick="removeTask(${t.id})"><i class="fas fa-trash"></i></button>
+        `;
+        list.appendChild(item);
     });
 }
 
-// Initial Run
-setInterval(updateClock, 1000);
-updateClock();
+window.removeTask = (id) => {
+    tasks = tasks.filter(t => t.id !== id);
+    renderTasks();
+};
+
+// Start
+setInterval(updateClocks, 1000);
 renderCalendar();
