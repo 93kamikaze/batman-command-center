@@ -1,82 +1,91 @@
-const qatarEvents = [
-    { name: "National Sports Day", date: "2026-02-10", type: "Tech/Wearables" },
-    { name: "Ramadan Begins", date: "2026-02-18", type: "Home Appliances" },
-    { name: "Eid Al-Fitr", date: "2026-03-20", type: "Gifting/Electronics" },
-    { name: "Eid Al-Adha", date: "2026-05-27", type: "Large Screens/Tech" },
-    { name: "Back to School", date: "2026-08-25", type: "Laptops/Tablets" },
-    { name: "Qatar National Day", date: "2026-12-18", type: "Mega Sales" }
-];
-
+let currentDisplayDate = new Date(); // Defaults to today
+let currentView = 'monthly';
 let tasks = [];
+
+const qatarEvents = [
+    { name: "National Sports Day", month: 1, day: 10 }, // Feb
+    { name: "Ramadan Promo", month: 1, day: 18 },
+    { name: "Eid Al-Fitr", month: 2, day: 20 },
+    { name: "Eid Al-Adha", month: 4, day: 27 },
+    { name: "Back to School", month: 7, day: 25 },
+    { name: "National Day", month: 11, day: 18 }
+];
 
 function updateClock() {
     const options = { timeZone: 'Asia/Qatar', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
     document.getElementById('local-time').innerText = "DOHA: " + new Intl.DateTimeFormat('en-GB', options).format(new Date());
 }
-setInterval(updateClock, 1000);
 
-function renderUpcomingEvents() {
-    const list = document.getElementById('event-list');
-    list.innerHTML = '';
-    const today = new Date();
-
-    qatarEvents.forEach(event => {
-        const eventDate = new Date(event.date);
-        const bufferDate = new Date(eventDate);
-        bufferDate.setDate(eventDate.getDate() - 14); // 2 week buffer reminder
-
-        const diffDays = Math.ceil((eventDate - today) / (1000 * 60 * 60 * 24));
-        
-        if (diffDays > -1) {
-            const div = document.createElement('div');
-            div.className = 'event-card';
-            div.innerHTML = `
-                <strong>${event.name}</strong><br>
-                <small>Actual: ${event.date}</small><br>
-                <span style="color: var(--bat-accent)">Start Promo: ${bufferDate.toDateString()}</span>
-            `;
-            list.appendChild(div);
-        }
-    });
-}
-
-function toggleView(view) {
+function renderCalendar() {
     const container = document.getElementById('calendar-container');
     const title = document.getElementById('view-title');
     container.innerHTML = '';
-    
-    if (view === 'monthly') {
-        title.innerText = "Monthly View (April 2026)";
-        container.className = '';
-        for (let i = 1; i <= 30; i++) {
-            const day = document.createElement('div');
-            day.className = 'calendar-day';
-            day.innerText = i;
-            container.appendChild(day);
+
+    if (currentView === 'monthly') {
+        const year = currentDisplayDate.getFullYear();
+        const month = currentDisplayDate.getMonth();
+        title.innerText = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(currentDisplayDate);
+        
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        // Empty slots for start of month
+        for (let i = 0; i < firstDay; i++) {
+            const empty = document.createElement('div');
+            empty.className = 'calendar-day';
+            empty.style.opacity = '0.3';
+            container.appendChild(empty);
+        }
+
+        for (let d = 1; d <= daysInMonth; d++) {
+            const dayDiv = document.createElement('div');
+            dayDiv.className = 'calendar-day';
+            dayDiv.innerHTML = `<span>${d}</span>`;
+            
+            // Check for Qatari Events
+            const event = qatarEvents.find(e => e.month === month && e.day === d);
+            if (event) {
+                dayDiv.innerHTML += `<div class="day-event">${event.name}</div>`;
+                dayDiv.style.borderColor = 'var(--bat-accent)';
+            }
+            container.appendChild(dayDiv);
         }
     } else {
-        title.innerText = "Yearly View 2026";
-        container.className = 'yearly-view';
+        title.innerText = currentDisplayDate.getFullYear() + " Overview";
+        container.style.gridTemplateColumns = 'repeat(4, 1fr)';
+        // Simplified Yearly Logic
         const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        months.forEach(m => {
+        months.forEach((m, idx) => {
             const mDiv = document.createElement('div');
-            mDiv.className = 'month-box';
-            mDiv.innerText = m;
+            mDiv.className = 'calendar-day';
+            mDiv.style.textAlign = 'center';
+            mDiv.innerHTML = `<strong>${m}</strong>`;
             container.appendChild(mDiv);
         });
     }
 }
 
-// Task Management
+function changeMonth(step) {
+    currentDisplayDate.setMonth(currentDisplayDate.getMonth() + step);
+    renderCalendar();
+}
+
+function setView(view) {
+    currentView = view;
+    renderCalendar();
+}
+
+// Task Handling
 document.getElementById('task-form').addEventListener('submit', (e) => {
     e.preventDefault();
     const task = {
         desc: document.getElementById('task-desc').value,
         time: document.getElementById('task-time').value,
-        urgency: document.getElementById('task-urgency').value
+        urgency: document.getElementById('task-urgency').value,
+        timestamp: new Date(document.getElementById('task-time').value).getTime()
     };
     tasks.push(task);
-    tasks.sort((a, b) => new Date(a.time) - new Date(b.time));
+    tasks.sort((a, b) => a.timestamp - b.timestamp);
     renderTasks();
     e.target.reset();
 });
@@ -92,7 +101,7 @@ function renderTasks() {
     });
 }
 
-// Init
+// Initial Run
+setInterval(updateClock, 1000);
 updateClock();
-renderUpcomingEvents();
-toggleView('monthly');
+renderCalendar();
